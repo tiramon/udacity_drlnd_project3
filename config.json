@@ -1,0 +1,49 @@
+{
+    "model": {
+        "actor": [
+            {
+                "type": "normalizeBatch"
+            },
+            {
+                "type": "Linear",
+                "size": 256
+            }
+        ],
+        "critic": [
+            {
+                "type": "Linear",
+                "size": 8,
+                "activation": "relu"
+            },
+            {
+                "type": "normalizeBatch"
+            },
+            {
+                "type": "Linear",
+                "size": 256
+                "activation": "relu"
+            },
+            {
+                "type": "dropout",
+                "rate": 0.2
+            },
+            {
+                "type": "Linear",
+                "size": 2
+            }
+        ]
+    },
+    "agent": {
+        "seed": 10,
+        "gamma": 0.99,
+        "buffer_size": 100000,
+        "batch_size": 64,
+        "tau": 0.001,
+        "LR_actor": 0.0001,
+        "LR_critic": 0.0001
+        "noise": {
+            "seed": 10,
+            "sigma": 0.1
+        }
+    }
+}
