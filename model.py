@@ -81,5 +81,5 @@ class Critic(nn.Module):
         xs = F.relu(self.batch(xs))
         x = torch.cat((xs, action), dim=1)
         x = F.relu(self.fc2(x))
-        x = self.dropout(x)
+        #x = self.dropout(x)
         return self.fc3(x)

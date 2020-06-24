@@ -8,7 +8,7 @@
     "BATCH_SIZE": 256,
     "WEIGHT_DECAY": 0,
     "noise": {
-        "sigma": 0.1,
+        "sigma": 0.2,
         "mu": 0.0,
         "theta": 0.15
     },
