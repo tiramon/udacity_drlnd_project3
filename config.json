@@ -5,10 +5,10 @@
     "GAMMA": 0.99,
     
     "BUFFER_SIZE": 400000,
-    "BATCH_SIZE": 256,
+    "BATCH_SIZE": 512,
     "WEIGHT_DECAY": 0,
     "noise": {
-        "sigma": 0.2,
+        "sigma": 0.02,
         "mu": 0.0,
         "theta": 0.15
     },
