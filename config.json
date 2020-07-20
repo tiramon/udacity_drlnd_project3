@@ -1,26 +1,29 @@
 {
-    "TAU": 0.001,
+    "train_per_episode": 2,
+    "TAU": 0.01,
     "LR_CRITIC": 0.01,
     "LR_ACTOR": 0.01,
     "GAMMA": 0.99,
     
-    "BUFFER_SIZE": 400000,
-    "BATCH_SIZE": 512,
+    "BUFFER_SIZE": 50000,
+    "BATCH_SIZE": 256,
     "WEIGHT_DECAY": 0.0001,
     "noise": {
-        "sigma": 0.2,
+        "sigma": 1.0,
         "mu": 0.0,
-        "theta": 0.15,
-        "scale": 0.1
+        "theta": 0.15
     },
-    "noise_factor": 2,
-    "noise_decay": 0.9999,
-    
+    "noise_factor": 0.6,
+    "noise_decay": 0.998,
+    "random": {
+        "seed": 42,
+        "count": 1000
+    },
     "seed": {
         "environment": 42,
-        "agent": 42    
+        "agent": 5
     },
     "network": {
-        "hidden": 512
+        "hidden": 256
     }    
 }

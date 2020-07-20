@@ -32,6 +32,7 @@ class Actor(nn.Module):
         self.batch = nn.BatchNorm1d(fc1_units)
         self.fc2 = nn.Linear(fc1_units, fc2_units)
         self.fc3 = nn.Linear(fc2_units, action_size)
+        self.dropout = nn.Dropout(p=.01)
         self.reset_parameters()
 
     def reset_parameters(self):
@@ -44,6 +45,7 @@ class Actor(nn.Module):
         x = self.fc1(state)
         #x = F.relu(self.batch(x))
         x = F.relu(self.fc2(x))
+        #x = self.dropout(x)
         return F.tanh(self.fc3(x))
 
 
@@ -66,7 +68,7 @@ class Critic(nn.Module):
         self.fc1 = nn.Linear(state_size, fc1_units)
         self.batch = nn.BatchNorm1d(fc1_units)
         self.fc2 = nn.Linear(fc1_units+action_size, fc2_units)
-        self.dropout = nn.Dropout(p=.001)
+        self.dropout = nn.Dropout(p=.01)
         self.fc3 = nn.Linear(fc2_units, 1)
         self.reset_parameters()
 
@@ -77,9 +79,9 @@ class Critic(nn.Module):
 
     def forward(self, state, action):
         """Build a critic (value) network that maps (state, action) pairs -> Q-values."""
-        xs = self.fc1(state)
-        #xs = F.relu(self.batch(xs))
-        x = torch.cat((xs, action), dim=1)
+        x = self.fc1(state)
+        #x = F.relu(self.batch(x))
+        x = torch.cat((x, action), dim=1)
         x = F.relu(self.fc2(x))
         #x = self.dropout(x)
         return self.fc3(x)

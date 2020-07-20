@@ -52,9 +52,10 @@ class MADDPG:
         target_actions = torch.stack(target_actions, dim=0)
         return target_actions
 
-    def update(self, experiences, agent_number ): #, logger):
+    def update(self, experiences, agent_number, gamma ): #, logger):
         """update the critics and actors of all the agents """
-
+        return self.maddpg_agent[agent_number].learn(experiences, gamma, self.tau)
+"""
         # need to transpose each element of the samples
         # to flip obs[parallel_agent][agent_number] to
         # obs[agent_number][parallel_agent]
@@ -91,7 +92,7 @@ class MADDPG:
         huber_loss = torch.nn.SmoothL1Loss()
         critic_loss = huber_loss(q, y.detach())
         critic_loss.backward()
-        #torch.nn.utils.clip_grad_norm_(agent.critic.parameters(), 0.5)
+        torch.nn.utils.clip_grad_norm_(agent.critic.parameters(), 0.5)
         agent.critic_optimizer.step()
 
         # ------------- actor ------------- #
@@ -120,15 +121,16 @@ class MADDPG:
         #                   {'critic loss': cl,
         #                    'actor_loss': al},
         #                   self.iter)
+        return [al, cl]
 
     def update_targets(self):
-        """soft update targets"""
+        "" "soft update targets" ""
         self.iter += 1
         for ddpg_agent in self.maddpg_agent:
             soft_update(ddpg_agent.target_actor, ddpg_agent.actor, self.tau)
             soft_update(ddpg_agent.target_critic, ddpg_agent.critic, self.tau)
             
-            
+"""            
             
 
 
