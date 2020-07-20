@@ -45,7 +45,7 @@ class Actor(nn.Module):
         x = self.fc1(state)
         #x = F.relu(self.batch(x))
         x = F.relu(self.fc2(x))
-        #x = self.dropout(x)
+        x = self.dropout(x)
         return F.tanh(self.fc3(x))
 
 
@@ -80,8 +80,8 @@ class Critic(nn.Module):
     def forward(self, state, action):
         """Build a critic (value) network that maps (state, action) pairs -> Q-values."""
         x = self.fc1(state)
-        #x = F.relu(self.batch(x))
+        x = F.relu(self.batch(x))
         x = torch.cat((x, action), dim=1)
         x = F.relu(self.fc2(x))
-        #x = self.dropout(x)
+        x = self.dropout(x)
         return self.fc3(x)

@@ -79,7 +79,7 @@ class DDPGAgent:
         self.critic_optimizer.zero_grad()
         critic_loss.backward()
         #from https://github.com/hortovanyi/DRLND-Continuous-Control/blob/master/ddpg_agent.py
-        #torch.nn.utils.clip_grad_norm_(self.critic.parameters(), 1)
+        torch.nn.utils.clip_grad_norm_(self.critic.parameters(), 1)
         self.critic_optimizer.step()
 
         # ---------------------------- update actor ---------------------------- #
