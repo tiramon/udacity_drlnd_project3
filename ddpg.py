@@ -1,15 +1,8 @@
-# individual network settings for each actor + critic pair
-# see networkforall for details
-
-#from networkforall import Network
 from model import Actor, Critic
-from utilities import hard_update, gumbel_softmax, onehot_from_logits
 from torch.optim import Adam
 import torch
 import numpy as np
 import torch.nn.functional as F
-
-
 
 # add OU noise for exploration
 from ounoise import OUNoise
@@ -31,11 +24,11 @@ class DDPGAgent:
 
         
         # initialize targets same as original networks
-        hard_update(self.target_actor, self.actor)
-        hard_update(self.target_critic, self.critic)
+        self.hard_update(self.target_actor, self.actor)
+        self.hard_update(self.target_critic, self.critic)
 
         self.actor_optimizer = Adam(self.actor.parameters(), lr=config['LR_ACTOR'])
-        self.critic_optimizer = Adam(self.critic.parameters(), lr=config['LR_CRITIC'])#, weight_decay=config['WEIGHT_DECAY'])
+        self.critic_optimizer = Adam(self.critic.parameters(), lr=config['LR_CRITIC'])
 
     def resetNoise(self):
         self.noise.reset()
@@ -49,7 +42,6 @@ class DDPGAgent:
         action = self.target_actor(obs) + noise*self.noise.noise()
         return action
     
-    #old code from drlnd2
     def learn(self, experiences, gamma, tau):
         """Update policy and value parameters using given batch of experience tuples.
         Q_targets = r + γ * critic_target(next_state, actor_target(next_state))
@@ -96,8 +88,6 @@ class DDPGAgent:
         self.soft_update(self.critic, self.target_critic, tau)
         self.soft_update(self.actor, self.target_actor, tau)  
         
-        #al = actor_loss.cpu().detach().item()
-        #cl = critic_loss.cpu().detach().item()
         return [al, cl]
 
     def soft_update(self, local_model, target_model, tau):
@@ -112,3 +102,14 @@ class DDPGAgent:
         """
         for target_param, local_param in zip(target_model.parameters(), local_model.parameters()):
             target_param.data.copy_(tau*local_param.data + (1.0-tau)*target_param.data)
+    
+    # https://github.com/ikostrikov/pytorch-ddpg-naf/blob/master/ddpg.py#L15
+    def hard_update(self, target, source):
+        """
+        Copy network parameters from source to target
+        Inputs:
+            target (torch.nn.Module): Net to copy parameters to
+            source (torch.nn.Module): Net whose parameters to copy
+        """
+        for target_param, param in zip(target.parameters(), source.parameters()):
+            target_param.data.copy_(param.data)
